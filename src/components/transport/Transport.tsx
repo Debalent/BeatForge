@@ -26,7 +26,7 @@ export function Transport() {
   }, [transport.timeSignature]);
 
   return (
-    <div className="flex items-center h-12 bg-forge-surface border-b border-forge-border px-3 gap-3 shrink-0">
+    <div className="relative flex items-center h-13 border-b border-forge-border px-3 gap-3 shrink-0" style={{ height: 52, background: 'linear-gradient(to bottom, #1e2140, #16192f)' }}>
 
       {/* ── Playback controls ── */}
       <div className="flex items-center gap-0.5">
@@ -47,13 +47,24 @@ export function Transport() {
         </button>
 
         <button
-          className="w-10 h-10 rounded-lg flex items-center justify-center bg-forge-accent hover:bg-forge-accent-light transition-colors shadow-glow-accent"
+          className="relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-150"
+          style={{
+            background: transport.playing
+              ? 'linear-gradient(135deg, #06b6d4, #0891b2)'
+              : 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+            boxShadow: transport.playing
+              ? '0 0 0 1px rgba(6,182,212,0.5), 0 0 20px rgba(6,182,212,0.4), 0 4px 12px rgba(0,0,0,0.5)'
+              : '0 0 0 1px rgba(139,92,246,0.5), 0 0 20px rgba(139,92,246,0.4), 0 4px 12px rgba(0,0,0,0.5)',
+          }}
           title="Play/Pause (Space)"
           onClick={transport.togglePlay}
         >
+          {transport.playing && (
+            <span className="absolute inset-0 rounded-xl animate-ping" style={{ background: 'rgba(6,182,212,0.2)' }} />
+          )}
           {transport.playing
-            ? <Pause className="w-5 h-5 text-white" />
-            : <Play  className="w-5 h-5 text-white ml-0.5" />
+            ? <Pause className="w-5 h-5 text-white relative z-10" />
+            : <Play  className="w-5 h-5 text-white relative z-10 ml-0.5" />
           }
         </button>
 
@@ -75,15 +86,15 @@ export function Transport() {
       </div>
 
       {/* ── Position display ── */}
-      <div className="font-mono text-sm text-forge-highlight bg-forge-bg rounded px-3 py-1 min-w-[96px] text-center border border-forge-border select-text">
+      <div className="display-readout font-mono text-sm rounded-md px-3 py-1.5 min-w-[100px] text-center select-text tracking-widest">
         {formatTime(transport.currentBeat)}
       </div>
 
       {/* ── BPM ── */}
-      <div className="flex flex-col items-center">
-        <div className="flex items-center gap-1">
+      <div className="flex flex-col items-center gap-0.5">
+        <div className="flex items-center gap-0.5">
           <button
-            className="w-4 h-4 text-forge-text-muted hover:text-forge-text text-xs leading-none"
+            className="w-4 h-5 flex items-center justify-center rounded text-forge-text-muted hover:text-forge-highlight text-xs transition-colors"
             onClick={() => { transport.nudgeBPM(-1); setBPM(transport.bpm - 1); }}
           >▼</button>
           <input
@@ -91,14 +102,15 @@ export function Transport() {
             value={transport.bpm}
             min={20} max={999}
             onChange={(e) => { const v = Number(e.target.value); transport.setBPM(v); setBPM(v); }}
-            className="w-14 bg-forge-bg border border-forge-border rounded px-1 py-0.5 text-center text-sm font-mono text-forge-text focus:outline-none focus:border-forge-accent"
+            className="w-14 rounded-md px-1 py-1 text-center text-sm font-mono focus:outline-none tracking-wider"
+            style={{ background: '#0a0c1a', border: '1px solid rgba(6,182,212,0.2)', color: '#22d3ee', boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.6)' }}
           />
           <button
-            className="w-4 h-4 text-forge-text-muted hover:text-forge-text text-xs leading-none"
+            className="w-4 h-5 flex items-center justify-center rounded text-forge-text-muted hover:text-forge-highlight text-xs transition-colors"
             onClick={() => { transport.nudgeBPM(1); setBPM(transport.bpm + 1); }}
           >▲</button>
         </div>
-        <span className="text-2xs text-forge-text-dim">BPM</span>
+        <span className="text-2xs font-semibold tracking-widest" style={{ color: '#3d4266', fontSize: '0.55rem' }}>BPM</span>
       </div>
 
       {/* ── Time Signature ── */}
@@ -139,7 +151,7 @@ export function Transport() {
       </button>
 
       {/* Divider */}
-      <div className="w-px h-6 bg-forge-border mx-1" />
+      <div className="w-px mx-1" style={{ width: 1, height: 28, background: 'linear-gradient(to bottom, transparent, rgba(139,92,246,0.4), transparent)' }} />
 
       {/* ── Snap ── */}
       <div className="flex items-center gap-1">

@@ -5,9 +5,12 @@
 /* ─── Custom base resets ─────────────────────────────────── */
 @layer base {
   :root {
-    --scrollbar-bg: #1a1d2e;
-    --scrollbar-thumb: #32365a;
-    --scrollbar-thumb-hover: #454980;
+    --scrollbar-bg: #0f1120;
+    --scrollbar-thumb: #2a2d48;
+    --scrollbar-thumb-hover: #3d4170;
+    --glow-cyan: rgba(6,182,212,0.45);
+    --glow-purple: rgba(139,92,246,0.45);
+    --glow-subtle: rgba(6,182,212,0.12);
   }
 
   * {
@@ -16,13 +19,14 @@
   }
 
   /* Thin scrollbars everywhere */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
   ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
-    border-radius: 3px;
+    border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+  ::-webkit-scrollbar-corner { background: var(--scrollbar-bg); }
 
   /* Prevent text selection drag artifacts in DAW */
   .no-select { user-select: none; }
@@ -31,6 +35,7 @@
   .workspace-shell {
     min-width: 960px;
     min-height: 600px;
+    background-color: #0f1120;
   }
 
   /* GPU layer hints for real-time panels */
@@ -38,11 +43,33 @@
     transform: translateZ(0);
     will-change: transform;
   }
+
+  /* Custom range input styling */
+  input[type="range"] {
+    -webkit-appearance: none;
+    background: transparent;
+  }
+  input[type="range"]::-webkit-slider-track {
+    height: 3px;
+    background: #2a2d48;
+    border-radius: 2px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px; height: 12px;
+    background: #06b6d4;
+    border-radius: 50%;
+    margin-top: -4.5px;
+    box-shadow: 0 0 6px rgba(6,182,212,0.6);
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  select option { background: #1a1d2e; }
 }
 
 /* ─── Component layer ─────────────────────────────────────── */
 @layer components {
-  /* Knob */
+  /* ── Knob ── */
   .knob {
     @apply relative w-10 h-10 rounded-full cursor-pointer select-none;
     background: conic-gradient(
@@ -50,20 +77,32 @@
       #8b5cf6 var(--knob-pct, 0%),
       #1e2235 var(--knob-pct, 0%)
     );
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow:
+      inset 0 1px 4px rgba(0,0,0,0.9),
+      inset 0 -1px 2px rgba(255,255,255,0.04),
+      0 2px 8px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(139,92,246,0.15);
+  }
+  .knob::after {
+    content: '';
+    @apply absolute inset-1.5 rounded-full;
+    background: radial-gradient(circle at 35% 35%, #2a2d48, #141728);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
   }
 
-  /* Fader track */
+  /* ── Fader ── */
   .fader-track {
-    @apply relative w-2 flex-1 rounded-full bg-forge-muted overflow-hidden;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+    @apply relative w-2 flex-1 rounded-full overflow-hidden;
+    background: #0f1120;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04);
   }
   .fader-fill {
-    @apply absolute bottom-0 left-0 right-0 rounded-full bg-forge-accent;
+    @apply absolute bottom-0 left-0 right-0 rounded-full;
+    background: linear-gradient(to top, #8b5cf6, #06b6d4);
     transition: height 16ms linear;
   }
 
-  /* VU meter bar */
+  /* ── VU meter ── */
   .vu-bar {
     @apply flex flex-col-reverse gap-px overflow-hidden;
   }
@@ -71,74 +110,138 @@
     @apply w-full h-1 rounded-sm;
   }
 
-  /* Clip block */
+  /* ── Clip block ── */
   .clip-block {
     @apply absolute top-0 bottom-0 rounded overflow-hidden cursor-grab active:cursor-grabbing;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
   }
 
-  /* Piano key */
+  /* ── Piano keys ── */
   .piano-key-white {
-    @apply relative bg-[#e8e8e8] hover:bg-[#f0f0f0] border border-gray-400 cursor-pointer;
-    border-radius: 0 0 3px 3px;
+    @apply relative border border-gray-600 cursor-pointer;
+    background: linear-gradient(to bottom, #d8d8d8, #f0f0f0);
+    border-radius: 0 0 4px 4px;
+    box-shadow: inset 0 -4px 6px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
+    transition: background 60ms;
+  }
+  .piano-key-white:hover {
+    background: linear-gradient(to bottom, #e8e8e8, #ffffff);
   }
   .piano-key-black {
-    @apply absolute bg-[#1a1a1a] hover:bg-[#2a2a2a] z-10 cursor-pointer;
-    border-radius: 0 0 2px 2px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.7);
+    @apply absolute z-10 cursor-pointer;
+    background: linear-gradient(to bottom, #2a2a2a, #111111);
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
+    transition: background 60ms;
+  }
+  .piano-key-black:hover {
+    background: linear-gradient(to bottom, #3a3a3a, #1e1e1e);
   }
   .piano-key-active {
-    @apply bg-forge-accent;
+    background: linear-gradient(to bottom, #7c3aed, #8b5cf6) !important;
+    box-shadow: 0 0 10px rgba(139,92,246,0.6) !important;
   }
 
-  /* Toolbar button */
+  /* ── Toolbar button ── */
   .toolbar-btn {
-    @apply flex items-center justify-center w-8 h-8 rounded text-forge-text-muted
-           hover:text-forge-text hover:bg-forge-muted transition-colors duration-100
-           focus:outline-none focus:ring-1 focus:ring-forge-accent;
+    @apply flex items-center justify-center w-8 h-8 rounded-md text-forge-text-muted
+           hover:text-forge-text transition-all duration-100
+           focus:outline-none;
+    background: transparent;
+  }
+  .toolbar-btn:hover {
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
   }
   .toolbar-btn.active {
-    @apply text-forge-accent-light bg-forge-accent-dim;
+    @apply text-forge-highlight;
+    background: rgba(6,182,212,0.12);
+    box-shadow: 0 0 0 1px rgba(6,182,212,0.25), 0 0 10px rgba(6,182,212,0.15);
   }
 
-  /* Panel header */
+  /* ── Panel header ── */
   .panel-header {
-    @apply flex items-center gap-2 px-3 h-8 bg-forge-surface border-b border-forge-border
+    @apply flex items-center gap-2 px-3 h-8 border-b border-forge-border
            text-xs font-semibold uppercase tracking-wider text-forge-text-muted select-none;
+    background: linear-gradient(to right, rgba(26,29,46,0.8), rgba(20,23,42,0.8));
   }
 
-  /* Context menu */
+  /* ── Context menu ── */
   .context-menu {
-    @apply min-w-[180px] bg-forge-panel border border-forge-border rounded-lg
-           shadow-panel py-1 z-50;
+    @apply min-w-[180px] border border-forge-border rounded-xl
+           shadow-panel py-1 z-50 overflow-hidden;
+    background: rgba(22,25,40,0.96);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
   }
   .context-menu-item {
-    @apply flex items-center gap-2 px-3 py-1.5 text-sm text-forge-text
-           hover:bg-forge-muted hover:text-white cursor-pointer transition-colors;
+    @apply flex items-center gap-2 px-3 py-1.5 text-xs text-forge-text
+           cursor-pointer transition-all;
+  }
+  .context-menu-item:hover {
+    background: rgba(6,182,212,0.1);
+    @apply text-white;
+    padding-left: 14px;
   }
 
-  /* LED indicator */
+  /* ── LED ── */
   .led {
     @apply w-2 h-2 rounded-full;
-    box-shadow: 0 0 4px currentColor;
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
   }
   .led-green { @apply bg-forge-success text-forge-success; }
   .led-red   { @apply bg-forge-danger text-forge-danger; }
   .led-amber { @apply bg-forge-warning text-forge-warning; }
 
-  /* Waveform canvas wrapper */
+  /* ── Waveform ── */
   .waveform-wrap {
     @apply w-full h-full overflow-hidden;
     image-rendering: pixelated;
   }
 
-  /* Grid background for sequencer */
+  /* ── Sequencer grid ── */
   .seq-grid {
     background-image:
       linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px),
       linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
     background-size: var(--cell-w, 40px) var(--track-h, 40px);
+  }
+
+  /* ── Forge scrollbar ── */
+  .forge-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+  .forge-scrollbar::-webkit-scrollbar-track { background: #0f1120; }
+  .forge-scrollbar::-webkit-scrollbar-thumb {
+    background: #2a2d48;
+    border-radius: 10px;
+  }
+  .forge-scrollbar::-webkit-scrollbar-thumb:hover { background: #3d4170; }
+
+  /* ── Glass panel surface ── */
+  .glass-surface {
+    background: rgba(26,29,46,0.85);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  /* ── Gradient accent line (use as child div) ── */
+  .accent-line {
+    @apply absolute bottom-0 left-0 right-0 h-px;
+    background: linear-gradient(to right, transparent, #06b6d4 25%, #8b5cf6 75%, transparent);
+    opacity: 0.5;
+  }
+
+  /* ── Number display (BPM, position) ── */
+  .display-readout {
+    font-variant-numeric: tabular-nums;
+    background: #0a0c1a;
+    border: 1px solid rgba(6,182,212,0.2);
+    box-shadow:
+      inset 0 2px 8px rgba(0,0,0,0.7),
+      0 0 14px rgba(6,182,212,0.08),
+      0 0 0 1px rgba(6,182,212,0.05);
+    color: #22d3ee;
+    letter-spacing: 0.05em;
   }
 }
 
@@ -147,12 +250,39 @@
   .text-2xs { font-size: 0.625rem; line-height: 0.875rem; }
 
   .resize-handle {
-    @apply absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-forge-accent
-           transition-colors z-10;
+    @apply absolute right-0 top-0 bottom-0 w-1 cursor-col-resize z-10;
+    background: transparent;
+    transition: background 120ms;
+  }
+  .resize-handle:hover {
+    background: linear-gradient(to bottom, #06b6d4, #8b5cf6);
+    box-shadow: 0 0 8px rgba(139,92,246,0.4);
   }
 
   /* Clip resize handle */
   .clip-resize {
     @apply absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize z-10;
+  }
+
+  /* Subtle gradient borders */
+  .glow-border-accent {
+    box-shadow: 0 0 0 1px rgba(139,92,246,0.3), 0 0 12px rgba(139,92,246,0.15);
+  }
+  .glow-border-highlight {
+    box-shadow: 0 0 0 1px rgba(6,182,212,0.3), 0 0 12px rgba(6,182,212,0.15);
+  }
+
+  /* Text gradient helpers */
+  .text-gradient-brand {
+    background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-warm {
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

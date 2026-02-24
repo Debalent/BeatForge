@@ -21,11 +21,15 @@ export function Titlebar({ projectName, dirty }: TitlebarProps) {
   const [online] = useState(navigator.onLine);
 
   return (
-    <header className="flex items-center h-10 bg-forge-surface border-b border-forge-border px-2 gap-1 shrink-0 z-50">
+    <header className="relative flex items-center h-11 border-b border-forge-border px-2 gap-1 shrink-0 z-50"
+      style={{ background: 'linear-gradient(to bottom, #1a1d32, #141728)' }}>
+      {/* Bottom accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(to right, transparent 0%, #06b6d4 30%, #8b5cf6 70%, transparent 100%)', opacity: 0.5 }} />
+
       {/* Logo */}
-      <div className="flex items-center gap-2 px-2 mr-2">
-        <img src="/BeatForge/icons/logo.png" alt="BeatForge" className="w-6 h-6 object-contain" />
-        <span className="font-brand font-bold text-sm bg-gradient-to-r from-forge-highlight to-forge-accent bg-clip-text text-transparent tracking-tight">
+      <div className="flex items-center gap-2 px-2 mr-1" style={{ background: 'rgba(6,182,212,0.05)', borderRadius: 6, padding: '4px 10px' }}>
+        <img src="/BeatForge/icons/logo.png" alt="BeatForge" className="w-5 h-5 object-contain" style={{ filter: 'drop-shadow(0 0 4px rgba(6,182,212,0.6))' }} />
+        <span className="font-brand font-bold text-sm tracking-tight" style={{ background: 'linear-gradient(135deg, #22d3ee, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
           BeatForge
         </span>
       </div>
@@ -73,37 +77,38 @@ export function Titlebar({ projectName, dirty }: TitlebarProps) {
       </div>
 
       {/* Performance indicators */}
-      <div className="flex items-center gap-3 px-2 text-2xs text-forge-text-muted font-mono">
-        <div className="flex items-center gap-1" title="CPU Load">
+      <div className="flex items-center gap-3 px-2 text-2xs font-mono" style={{ color: '#7c84a8' }}>
+        <div className="flex items-center gap-1.5 px-2 py-1 rounded" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.06)' }} title="CPU Load">
           <Cpu className="w-3 h-3" />
           <span className={clsx(cpuLoad > 70 ? 'text-forge-danger' : cpuLoad > 40 ? 'text-forge-warning' : 'text-forge-success')}>
             {cpuLoad}%
           </span>
         </div>
-        <div className="flex items-center gap-1" title="Latency">
-          <span>{latency.toFixed(1)}ms</span>
+        <div className="flex items-center gap-1.5 px-2 py-1 rounded" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.06)' }} title="Latency">
+          <span style={{ color: '#22d3ee' }}>{latency.toFixed(1)}</span>
+          <span>ms</span>
         </div>
-        <div title={online ? 'Online' : 'Offline'}>
+        <div title={online ? 'Online' : 'Offline'} className="flex items-center">
           {online
-            ? <Wifi className="w-3 h-3 text-forge-success" />
-            : <WifiOff className="w-3 h-3 text-forge-danger" />
+            ? <Wifi className="w-3.5 h-3.5 text-forge-success" style={{ filter: 'drop-shadow(0 0 4px #10b981)' }} />
+            : <WifiOff className="w-3.5 h-3.5 text-forge-danger" />
           }
         </div>
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center gap-0.5">
+      <div className="flex items-center gap-0.5 ml-1">
         <button className="toolbar-btn" title="Save (Ctrl+S)" onClick={saveToFile}>
-          <Save className="w-4 h-4" />
+          <Save className="w-3.5 h-3.5" />
         </button>
         <button className="toolbar-btn" title="Open project" onClick={openFromFile}>
-          <FolderOpen className="w-4 h-4" />
+          <FolderOpen className="w-3.5 h-3.5" />
         </button>
         <button className="toolbar-btn" title="Collaborators" onClick={() => togglePanel('collab_panel')}>
-          <Users className="w-4 h-4" />
+          <Users className="w-3.5 h-3.5" />
         </button>
         <button className="toolbar-btn" title="Settings" onClick={() => togglePanel('settings')}>
-          <Settings className="w-4 h-4" />
+          <Settings className="w-3.5 h-3.5" />
         </button>
       </div>
     </header>
