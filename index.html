@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BeatForge – Professional DAW</title>
+    <link rel="icon" type="image/svg+xml" href="/BeatForge/icons/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="BeatForge – Professional browser-first DAW powered by WebAudio & WASM" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/BeatForge/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/BeatForge/manifest.webmanifest" />
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- COOP/COEP for SharedArrayBuffer (AudioWorklets need this) -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+
+    <style>
+      * { box-sizing: border-box; }
+      html, body, #root {
+        margin: 0; padding: 0;
+        width: 100%; height: 100%;
+        overflow: hidden;
+        background: #14172a;
+        color: #e2e8f0;
+      }
+      /* Loading splash */
+      #splash {
+        position: fixed; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 0;
+        background: #14172a;
+        z-index: 9999;
+        transition: opacity 0.4s ease;
+      }
+      #splash.hidden { opacity: 0; pointer-events: none; }
+      /* Logo image */
+      #splash-logo-img {
+        width: 220px;
+        height: 220px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 32px rgba(6,182,212,0.35)) drop-shadow(0 0 64px rgba(139,92,246,0.25));
+        margin-bottom: 0;
+      }
+      /* "BeatForge" wordmark — cyan → purple gradient, matching logo */
+      #splash-wordmark {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 2.75rem; font-weight: 800;
+        background: linear-gradient(90deg, #22d3ee 0%, #06b6d4 30%, #a78bfa 70%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.03em;
+        margin-top: -0.5rem;
+        line-height: 1.1;
+      }
+      /* "by Creatorsync" subtitle in teal, matching logo */
+      #splash-sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: #06b6d4;
+        letter-spacing: 0.08em;
+        margin-top: 0.35rem;
+        opacity: 0.85;
+      }
+      #splash-sub span {
+        opacity: 0.6;
+        color: #7c84a8;
+      }
+      /* Progress bar */
+      #splash-bar {
+        width: 180px; height: 2px;
+        background: rgba(42,45,69,0.8);
+        border-radius: 9999px;
+        overflow: hidden;
+        margin-top: 2rem;
+      }
+      #splash-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+        border-radius: 9999px;
+        animation: load 1.6s cubic-bezier(0.4,0,0.2,1) forwards;
+      }
+      @keyframes load {
+        from { width: 0%; }
+        to   { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading splash -->
+    <div id="splash">
+      <img id="splash-logo-img" src="/BeatForge/icons/logo.png" alt="BeatForge" />
+      <div id="splash-wordmark">BeatForge</div>
+      <div id="splash-sub"><span>by </span>● Creatorsync</div>
+      <div id="splash-bar"><div id="splash-progress"></div></div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Remove splash after app loads
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const splash = document.getElementById('splash');
+          if (splash) {
+            splash.classList.add('hidden');
+            setTimeout(() => splash.remove(), 500);
+          }
+        }, 1800);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#06b6d4"/>
+      <stop offset="50%"  stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Anvil body -->
+  <path d="M14 34 Q12 34 12 36 L12 40 Q12 42 14 42 L50 42 Q52 42 52 40 L52 36 Q52 34 50 34 Z"
+        fill="url(#g1)" filter="url(#glow)" opacity="0.95"/>
+  <!-- Anvil top -->
+  <path d="M20 26 L44 26 Q48 26 48 30 L48 34 L16 34 L16 30 Q16 26 20 26 Z"
+        fill="url(#g1)" opacity="0.9"/>
+  <!-- Anvil legs -->
+  <rect x="22" y="42" width="6"  height="8" rx="1" fill="url(#g1)" opacity="0.8"/>
+  <rect x="36" y="42" width="6"  height="8" rx="1" fill="url(#g1)" opacity="0.8"/>
+  <!-- Waveform on anvil -->
+  <polyline points="20,30 24,27 27,33 30,26 33,33 36,27 40,30 43,30"
+            stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <!-- Hammer -->
+  <rect x="34" y="10" width="16" height="8" rx="2"
+        fill="url(#g1)" transform="rotate(-35 42 14)" filter="url(#glow)" opacity="0.95"/>
+</svg>

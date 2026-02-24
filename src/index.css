@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Custom base resets ─────────────────────────────────── */
+@layer base {
+  :root {
+    --scrollbar-bg: #1a1d2e;
+    --scrollbar-thumb: #32365a;
+    --scrollbar-thumb-hover: #454980;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Thin scrollbars everywhere */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+  /* Prevent text selection drag artifacts in DAW */
+  .no-select { user-select: none; }
+
+  /* DAW workspace minimum size */
+  .workspace-shell {
+    min-width: 960px;
+    min-height: 600px;
+  }
+
+  /* GPU layer hints for real-time panels */
+  .gpu-layer {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}
+
+/* ─── Component layer ─────────────────────────────────────── */
+@layer components {
+  /* Knob */
+  .knob {
+    @apply relative w-10 h-10 rounded-full cursor-pointer select-none;
+    background: conic-gradient(
+      from -135deg,
+      #8b5cf6 var(--knob-pct, 0%),
+      #1e2235 var(--knob-pct, 0%)
+    );
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  /* Fader track */
+  .fader-track {
+    @apply relative w-2 flex-1 rounded-full bg-forge-muted overflow-hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+  }
+  .fader-fill {
+    @apply absolute bottom-0 left-0 right-0 rounded-full bg-forge-accent;
+    transition: height 16ms linear;
+  }
+
+  /* VU meter bar */
+  .vu-bar {
+    @apply flex flex-col-reverse gap-px overflow-hidden;
+  }
+  .vu-segment {
+    @apply w-full h-1 rounded-sm;
+  }
+
+  /* Clip block */
+  .clip-block {
+    @apply absolute top-0 bottom-0 rounded overflow-hidden cursor-grab active:cursor-grabbing;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+
+  /* Piano key */
+  .piano-key-white {
+    @apply relative bg-[#e8e8e8] hover:bg-[#f0f0f0] border border-gray-400 cursor-pointer;
+    border-radius: 0 0 3px 3px;
+  }
+  .piano-key-black {
+    @apply absolute bg-[#1a1a1a] hover:bg-[#2a2a2a] z-10 cursor-pointer;
+    border-radius: 0 0 2px 2px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.7);
+  }
+  .piano-key-active {
+    @apply bg-forge-accent;
+  }
+
+  /* Toolbar button */
+  .toolbar-btn {
+    @apply flex items-center justify-center w-8 h-8 rounded text-forge-text-muted
+           hover:text-forge-text hover:bg-forge-muted transition-colors duration-100
+           focus:outline-none focus:ring-1 focus:ring-forge-accent;
+  }
+  .toolbar-btn.active {
+    @apply text-forge-accent-light bg-forge-accent-dim;
+  }
+
+  /* Panel header */
+  .panel-header {
+    @apply flex items-center gap-2 px-3 h-8 bg-forge-surface border-b border-forge-border
+           text-xs font-semibold uppercase tracking-wider text-forge-text-muted select-none;
+  }
+
+  /* Context menu */
+  .context-menu {
+    @apply min-w-[180px] bg-forge-panel border border-forge-border rounded-lg
+           shadow-panel py-1 z-50;
+  }
+  .context-menu-item {
+    @apply flex items-center gap-2 px-3 py-1.5 text-sm text-forge-text
+           hover:bg-forge-muted hover:text-white cursor-pointer transition-colors;
+  }
+
+  /* LED indicator */
+  .led {
+    @apply w-2 h-2 rounded-full;
+    box-shadow: 0 0 4px currentColor;
+  }
+  .led-green { @apply bg-forge-success text-forge-success; }
+  .led-red   { @apply bg-forge-danger text-forge-danger; }
+  .led-amber { @apply bg-forge-warning text-forge-warning; }
+
+  /* Waveform canvas wrapper */
+  .waveform-wrap {
+    @apply w-full h-full overflow-hidden;
+    image-rendering: pixelated;
+  }
+
+  /* Grid background for sequencer */
+  .seq-grid {
+    background-image:
+      linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+    background-size: var(--cell-w, 40px) var(--track-h, 40px);
+  }
+}
+
+/* ─── Utilities ───────────────────────────────────────────── */
+@layer utilities {
+  .text-2xs { font-size: 0.625rem; line-height: 0.875rem; }
+
+  .resize-handle {
+    @apply absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-forge-accent
+           transition-colors z-10;
+  }
+
+  /* Clip resize handle */
+  .clip-resize {
+    @apply absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize z-10;
+  }
+}
