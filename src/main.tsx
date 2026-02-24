@@ -5,6 +5,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import App from './App';
 import './index.css';
 import { registerSW } from 'virtual:pwa-register';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 // Register PWA service worker
 const updateSW = registerSW({
@@ -20,8 +21,10 @@ const updateSW = registerSW({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <DndProvider backend={HTML5Backend}>
-      <App />
-    </DndProvider>
+    <ErrorBoundary>
+      <DndProvider backend={HTML5Backend}>
+        <App />
+      </DndProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
