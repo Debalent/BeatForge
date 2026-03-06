@@ -1,0 +1,41 @@
+{
+  "name": "Demo Project",
+  "bpm": 120,
+  "tracks": [
+    {
+      "name": "Kick",
+      "type": "drum",
+      "pattern": [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+    },
+    {
+      "name": "Snare",
+      "type": "drum",
+      "pattern": [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0]
+    },
+    {
+      "name": "HiHat",
+      "type": "drum",
+      "pattern": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+    },
+    {
+      "name": "Bass",
+      "type": "synth",
+      "notes": [
+        { "pitch": 36, "start": 0, "duration": 1 },
+        { "pitch": 36, "start": 4, "duration": 1 },
+        { "pitch": 38, "start": 8, "duration": 1 },
+        { "pitch": 38, "start": 12, "duration": 1 }
+      ]
+    },
+    {
+      "name": "Lead Synth",
+      "type": "synth",
+      "notes": [
+        { "pitch": 60, "start": 0, "duration": 2 },
+        { "pitch": 62, "start": 4, "duration": 2 },
+        { "pitch": 64, "start": 8, "duration": 2 },
+        { "pitch": 67, "start": 12, "duration": 2 }
+      ]
+    }
+  ]
+}
